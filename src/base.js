@@ -4,33 +4,7 @@ import {list,order} from"./modules/factory";
 //clunky page turner:
 let pagecount=null
 
-//DOM INPUT (BIG INPUT FUNCTION)
-/* 
-function inputTodo(){
-    
-    let title= titleField.value
-    let description= descriptionField.value
-    let dueDate= dateField.value
 
-    if (high.checked===true){let priority="high"}
-    if (medium.checked===true){let priority="medium"}
-    if (low.checked===true){let priority="low"}
-
-    
-
-    let projectNumber= 1; //todo
-    list.addTodo(title,description,dueDate,priority,projectNumber)
-}
-
-
- */
-
-
-//basic function to populate the panels
-
-
-
-//DOM OUTPUT (BIG OUTPUT FUNCTION, INCLUDING UPDATE ALL)
 
 
 
@@ -98,18 +72,42 @@ const display =(()=>{
         /* console.log(list) */
         for(let i=0;i<list.length;i++){
             
-            let texttoshow=document.createElement("li");
-            texttoshow.classList.add("todo");
-            texttoshow.dataset.priority=list[i].priority
-            texttoshow.textContent=`${list[i].title}, ${list[i].dueDate}, index ${list[i].todoIndex} ` //rajouter les données nécessaires
-            let icon=buildicon(list[i].projectNumber,list[i].todoIndex)
-            texttoshow.appendChild(icon)
-            listToShow.appendChild(texttoshow)
+            let listitem=document.createElement("li");
+            listitem.classList.add("todo");
+            listitem.dataset.priority=list[i].priority
+            let text=document.createTextNode(`${list[i].title}, ${list[i].dueDate}, importance${list[i].priority}`)//plus si nécessaire  index ${list[i].todoIndex}  
+            let icon=buildicon(list[i].projectNumber,list[i].todoIndex);
+            let checkbox=buildCheckBox(list[i].projectNumber,list[i].todoIndex);
+            listitem.appendChild(checkbox);
+            listitem.appendChild(text);
+            listitem.appendChild(icon)
+        
+            listToShow.appendChild(listitem)
+
+            
+            
+            
+            
             
         }
         rightContent.appendChild(listToShow)
         colorImportance()
     }
+    const buildCheckBox=(pnum,tdnum)=>{
+        let box=document.createElement("input");
+        box.setAttribute("type", "checkbox");
+        box.dataset.project=pnum;
+        box.dataset.number=tdnum;
+        /* box.classList.add("fas");
+        box.classList.add("fa-check-square"); */
+        box.defaultChecked=false
+        box.addEventListener("click",listen.tdCheckbox);
+        return box
+
+    }
+
+
+
     const buildicon=(pnum,tdnum)=>{
         let icon=document.createElement("i")
         icon.classList.add("fas");
@@ -143,6 +141,8 @@ return{
 const listen=(()=>{
     const toDoicon=function(){
         console.log(this.dataset.project , this.dataset.number)
+        let index=parseInt(this.dataset.number)
+        toDoForm(index)
     }
     const projectButton=function(){
         let num=parseInt(this.dataset.number);
@@ -174,7 +174,10 @@ const listen=(()=>{
        else display.displayTodos(order.byImportance(order.todosbyProject(pagecount)))
         console.log("fuck you")
     }
-    
+    const tdCheckbox=function(){
+        
+        
+    }
 
 
 
@@ -190,7 +193,8 @@ return{
     projectButton,
     showAll,
     sortbydate,
-    important
+    important,
+    tdCheckbox
 }
 
 })()
@@ -226,11 +230,19 @@ const importantButton=document.querySelector(".important-button")
 list.addProject("bitoufle", "un projet basé sur la bitoufle",1);
 list.addProject("soupline", "un ensemble de taches destinées à acquérir du Soupline, classées du plus important au moins important, oui oui, vraiment",2);
 list.addProject("autre projet","un autre projet, étonnemment classé à l'index 11, et vide.",11)
+list.addProject("manger","c'est important",8)
+list.addProject("to do list","à faire sur la to do list",3)
 list.addTodo("définir bitoufle","se renseigner sur le sens du mot bitoufle",2019,0,1)
 list.addTodo("acquérir poivre","acquérir du poivre",2019,1,1)
 list.addTodo("magasin","voir si y'a du soupline au magasin",2016,2,2)
 list.addTodo("pétrole","mouflardax du pétrole",2097,1,2)
 list.addTodo("futur","mouflardax du futur",2050,3,2)
+list.addTodo("acheter à manger","se procurer un ensemble de denrées comestibles",2019,3,8)
+list.addTodo("préparer à manger","s'affairer à la concoction de l'ensemble des denrées",2019,2,8)
+list.addTodo("manger","ingérer les aliments",2019,1,8)
+list.addTodo("faire la vaisselle","muuh",2019,0,8)
+list.addTodo("digérer","laisser les sucs gastriques faire leur travail",2019,0,8)
+
 
 
 display.displayProjectTitles()
@@ -240,6 +252,71 @@ console.table(list.todos) */
 console.log(order.fetchProject("2"))
 
 
+
+
+
+//a ranger
+
+const rightContentContainer=document.querySelector(".right-content-container")
+const container=document.createElement("div");
+const titlefield=document.createElement("input");
+titlefield.setAttribute("type","text");
+container.classList.add("formcontainer");
+container.classList.add("hidden")
+const description=document.createElement("textarea");
+container.appendChild(titlefield);
+container.appendChild(description);
+rightContentContainer.appendChild(container)
+
+const toDoForm=(index)=>{
+    container.classList.toggle("hidden")
+    const todo= order.fetchTodo(index);
+    container.addEventListener("transitionend",buildback)
+    function buildback(cont){
+        cont.target.removeEventListener("transitionend",buildback);
+        const backbutton=document.createElement("I")
+        backbutton.classList.add("fas");
+        backbutton.classList.add("fa-arrow-left");
+        backbutton.addEventListener("click",removeForm);
+        container.appendChild(backbutton);
+        cont.target.removeEventListener("transitionend",buildback)
+        }
+
+
+
+    
+    
+
+    
+        
+        titlefield.value=todo.title;
+        titlefield.readOnly=true
+
+    
+        description.value=todo.description;
+        description.readOnly=true
+    }
+    function removeForm(){
+        container.classList.toggle("hidden");
+        
+        container.addEventListener("transitionend",removeAll);
+        const backbut=document.querySelector(".fa-arrow-left");
+        
+        container.addEventListener("transitionend",removeAll)
+        function removeAll(){
+            while (container.childNodes.length>2){
+                container.removeChild(container.lastChild)
+            }
+
+        }
+
+    }
+
+
+    
+    
+
+    
 
 
 

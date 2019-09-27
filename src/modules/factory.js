@@ -126,6 +126,10 @@ const order =(()=>{
         let goodproject= projectArray.find((project)=>project.index==searchindex)
         return goodproject
     }
+    const fetchTodo=(searchindex)=>{
+        let goodtodo=todosArray.find((todo)=>todo.todoIndex===searchindex)
+        return goodtodo
+    }
     
         
    
@@ -141,7 +145,8 @@ return{
     projectTitles,
     byDate,
     byImportance,
-    fetchProject
+    fetchProject,
+    fetchTodo
 
 }
 
