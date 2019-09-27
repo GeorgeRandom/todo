@@ -1,0 +1,93 @@
+.main-container{
+    display: grid;
+    position:relative;
+    grid-template-columns: 1fr 4fr;
+    border:2px solid black;
+    border-radius:40px;
+    padding:2%;
+    max-width:450px;
+    grid-gap: 10px;
+
+}
+.right-panel{
+    display: inline-block;
+    position:relative;
+    
+    
+    }
+.bottomright{
+    position: absolute;
+    bottom:0px;
+    right:0px;
+}
+
+.left-panel{
+    position: relative;
+    height:500px;
+}
+.project-modify{
+    position:absolute;
+    bottom:0px;
+}
+
+
+.left-panel button:focus{
+    background-color:red;
+}
+
+.low{
+    color:blue;
+}
+.mid{
+    color:black;
+}
+.important{
+    color:red
+}
+.nofuck{
+    color:green;
+}
+button{
+    border:none;
+    padding:3px;
+    
+}
+
+
+
+
+
+/* all the dynamic forms */
+/* .submitform{
+    border:1px solid black;
+    transition: 5s all;
+    
+    height: 400px;
+    width: 400px;
+    font-size:20px;
+    }
+.submitform .submitbutton{
+    width:50px;
+    height:50px;
+}
+.submitform textarea {
+    width: 300px;
+    height: 10em;
+    resize: none;
+    }
+.hidden textarea,
+.hidden input,
+.hidden button,
+.hidden select{
+    width:0px;
+    height:0px;
+    transition: 3s all;
+    border:none;
+    font-size:0px;
+}
+.hidden{
+    height: 0px;
+    width:0px;
+    transition: 5s all;
+    font-size:0px;
+} */
